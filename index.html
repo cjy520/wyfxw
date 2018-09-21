@@ -1,0 +1,153 @@
+
+<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Expires" content="0"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Cache-control" content="no-cache"><meta http-equiv="Cache" content="no-cache"><title>管理智障网</title><link rel="icon" href="http://gtms04.alicdn.com/tps/i4/TB1_oz6GVXXXXaFXpXXJDFnIXXX-64-64.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+    <title>管理智障网</title>
+</head>
+
+<body bgcolor="white">
+    <center>
+        <h1>管理智障网</h1>
+    </center>
+    <hr>
+    <center>打倒狗管理，从你我做起</center>
+    <hr>
+    <a href="https://wanwang.aliyun.com/nametrade/detail/online.html?domainName=glzzw.com">站长穷困潦倒，恐无力维持，特寻有缘人继承大业</a>
+    <a href="https://wanwang.aliyun.com/nametrade/detail/online.html?domainName=nmpgl.com">nmpgl.com</a>
+    <hr>
+    <link href="https://cdn.bootcss.com/element-ui/2.4.0/theme-chalk/index.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/vue/2.5.17-beta.0/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/element-ui/2.4.0/index.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+    <style>
+        .step-time{
+            color: rgba(0,0,0,.25);
+            font-style: 12px;
+        }
+        .step-des{
+            margin-bottom: 12px;
+            color: #ccc;
+            word-wrap: break-word; 
+        }
+
+    </style>
+    <div id="app" style="display:none">
+        <el-form ref="form" v-loading="loading" :rules="rules" :model="form" label-width="80px">
+            <br />
+            <el-alert title="揭露智障管理" type="error"></el-alert>
+            <br />
+            <el-form-item label="TA是谁" prop="name">
+                <el-input v-model="form.name"></el-input>
+            </el-form-item>
+            <el-form-item label="有多贱" prop="value">
+                <el-rate style="margin-top:12px" v-model="form.value"></el-rate>
+            </el-form-item>
+            <el-form-item label="开始表演" prop="des">
+                <el-input type="textarea" v-model="form.des"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="onSubmit">上台</el-button>
+                <el-button @click="resetForm()">重来</el-button>
+            </el-form-item>
+        </el-form>
+        <br />
+        <el-alert title="大数据人工智能分析内容，自动过滤垃圾消息" type="success"></el-alert>
+        <br />
+
+        <div class="el-steps el-steps--vertical" style="height:auto;">
+            <div class="el-step is-vertical" v-for="item in data" :key="item.id">
+                <div class="el-step__head is-finish">
+                    <div class="el-step__line" style="margin-right: 0px;"><i class="el-step__line-inner" style="transition-delay: 0ms; border-width: 0px; "></i></div>
+                    <div class="el-step__icon is-icon"><i class="el-step__icon-inner el-icon-view"></i>
+                    </div>
+                </div>
+                <div class="el-step__main" style="width:1px;">
+                    <div class="step-name">{{item.name}}</div>
+                    <div class="step-time"><em>{{item.ctime}}</em></div>
+                    <el-rate v-model="item.value" show-score text-color="#ff9900" disabled></el-rate>
+                    <div class="step-des">{{item.des}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var p='glzzw/'
+        var url='nmb.php'
+        url=p+url
+        var Main = {
+            data() {
+                return {
+                    form: {
+                        name: '',
+                        value: 1,
+                        des: ''
+                    },
+                    loading: true,
+                    rules: {
+                        name: [
+                            { required: true, message: '请输入贱人贱名', trigger: 'blur' },
+                            { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+                        ],
+                        des: [
+                            { required: true, message: '请回忆事情经过', trigger: 'blur' },
+                            { min: 50, max: 200, message: '长度在 50 到 200 个字符', trigger: 'blur' }
+                        ]
+                    }
+                    , data: []
+                }
+            },
+            created: function () {
+                const _ = this
+                axios.get(url)
+                    .then(function (response) {
+                        _.loading = false
+                        response.data.status ? _.data = response.data.data : _.$message.error(response.data.msg)
+                    })
+                    .catch(function (error) {
+                        _.error(error)
+                    });
+                document.getElementById('app').style.display = 'block'
+            },
+            methods: {
+                onSubmit() {
+                    const _ = this
+                    this.$refs['form'].validate((valid) => {
+                        if (valid) {
+                            _.loading = true
+                            axios.post(url, this.form)
+                                .then(function (response) {
+                                    if (response.data.status) {
+                                        _.data.unshift(response.data.data)
+                                        _.resetForm()
+                                    }
+                                    _.$message({
+                                        message: response.data.msg,
+                                        type: response.data.status ? 'success' : 'error'
+                                    })
+                                    _.loading = false
+                                })
+                                .catch(function (error) {
+                                    _.error(error)
+                                });
+                        }
+                    });
+                },
+                resetForm() {
+                    this.$refs['form'].resetFields();
+                },
+                error: function (error) {
+                    this.loading = false
+                    this.$alert("遇见了不可描述的错误 " + error.message, '被贱了', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            location.reload()
+                        }
+                    });
+                }
+            }
+        }
+        var Ctor = Vue.extend(Main)
+        new Ctor().$mount('#app')
+    </script>
+</body>
+
+</html>
